@@ -1,23 +1,32 @@
 package functions;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+
 public class Year {
-    private String prixMoyen;
-    private String prixMax;
-    private String prixMin;
+    Dataset<Row> valeurs;
 
-    public String getPrixMoyen() {
-        return prixMoyen;
+    public Year(Dataset<Row> valeursDataset){
+        System.out.println("New Year created. ");
+        this.valeurs = valeursDataset;
     }
 
-    public String getPrixMax() {
-        return prixMax;
+    public String getMin() {
+        return null;
     }
 
-    public String getPrixMin() {
-        return prixMin;
+    public String getMax() {
+        return null;
     }
 
     public String getEcart() {
-        return String.valueOf(Float.parseFloat(prixMax) - Float.parseFloat(prixMin));
+        return null;
+    }
+
+    public String getAvg() {
+        float moyenne;
+        float somme;
+        float diviseur;
+        return null;
     }
 }

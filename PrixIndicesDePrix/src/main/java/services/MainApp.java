@@ -1,9 +1,9 @@
 package services;
 
+import functions.Year;
+import functions.funct.RowsToYears;
 import functions.reader.FileReader;
 import functions.writer.FileWriter;
-import functions.Cotation;
-import functions.funct.ConvertRowsToCotations;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
@@ -14,23 +14,21 @@ import org.apache.spark.sql.SparkSession;
 public class MainApp {
     public static void main( String[] args ) {
         System.out.println("Main app. ");
-        //String inputFile = "C:/Users/Y.DUPERRAY/Documents/ARBORESCENCE/Scolaire/3iL/M2/Exploitation des données de masse/serie_010002078_11012022/valeurs_mensuelles.csv";
-        //String outputDirectory = "C:/Users/Y.DUPERRAY/Documents/ARBORESCENCE/Scolaire/3iL/M2/Exploitation des données de masse/output";
-        String inputFile ="target/test-classes/valeurs_mensuelles.csv";
-        String outputDirectory ="target/test-classes";
+        String inputFile ="src/main/resources/valeurs_mensuelles.csv";
+        String outputDirectory = "target/classes/output";
 
         SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("SparkApp");
         SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
 
         FileReader fileReader = new FileReader(inputFile, sparkSession);
         Dataset<Row> lines =  fileReader.get();
-        lines.printSchema();
+        lines.show();
 
-        ConvertRowsToCotations c = new ConvertRowsToCotations(sparkSession);
-        Dataset<Cotation> test = c.apply(lines);
-        test.printSchema();
+        RowsToYears rowsToYears = new RowsToYears(sparkSession);
+        Dataset<Year> years = rowsToYears.apply(lines);
+        years.show();
 
         FileWriter fileWriter = new FileWriter(outputDirectory);
-        fileWriter.accept(lines);
+        fileWriter.accept(years.toDF());
     }
 }
