@@ -1,9 +1,4 @@
-HDFS : 
-
-
-Lecture : 
-
-
+Lecture HDFS : 
 RemoteIterator<LocatedFileStatus> fileIterator = hdfs.listFiles(inputPath, true);
 while(fileIterator.hasNext()){
 LocatedFileStatus locatedFileStatus = fileIterator.next(); …
@@ -13,29 +8,17 @@ IOUtils.copy(instream, writer, "UTF-8");
 
 
 
-Ecriture :
+Ecriture simple : 
 ds.coalesce(1).write().format("csv").mode("overwrite").save("path");
 
 
 
-
+Ecriture HDFS :
 String outlines = wordCount.entrySet().stream().map( e -> String.format("%s,%d", e.getKey(), e.getValue())).collect(Collectors.joining("\n"));
 FSDataOutputStream outstream = hdfs.create(outputPath.suffix(String.format("/wordcount/%s", locatedFileStatus.getPath().getName())));
 IOUtils.write(outlines, outstream, "UTF-8");
 outstream.close();
 instream.close();
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
