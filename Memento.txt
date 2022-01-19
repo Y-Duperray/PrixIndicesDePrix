@@ -64,3 +64,8 @@ Dataset<Row> joinDs = ds.join(otherDs, ds.col("colonne").equalTo(otherDs.col("co
 
 
 
+repo Y : 
+https://github.com/Y-Duperray/PrixIndicesDePrix
+
+repo ref : 
+https://github.com/nicaiseeric/explora-data-spark-sample/
