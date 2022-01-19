@@ -1,0 +1,83 @@
+HDFS : 
+
+
+Lecture : 
+
+
+RemoteIterator<LocatedFileStatus> fileIterator = hdfs.listFiles(inputPath, true);
+while(fileIterator.hasNext()){
+LocatedFileStatus locatedFileStatus = fileIterator.next(); …
+FSDataInputStream instream = hdfs.open(locatedFileStatus.getPath());
+StringWriter writer = new StringWriter();
+IOUtils.copy(instream, writer, "UTF-8");
+
+
+
+Ecriture :
+ds.coalesce(1).write().format("csv").mode("overwrite").save("path");
+
+
+
+
+String outlines = wordCount.entrySet().stream().map( e -> String.format("%s,%d", e.getKey(), e.getValue())).collect(Collectors.joining("\n"));
+FSDataOutputStream outstream = hdfs.create(outputPath.suffix(String.format("/wordcount/%s", locatedFileStatus.getPath().getName())));
+IOUtils.write(outlines, outstream, "UTF-8");
+outstream.close();
+instream.close();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Suppression HDFS : hdfs.delete(path, true);
+Test HDFS : asertThat(listStatus(path, length));sGreaterTan(0);
+
+Diviser colonne : 
+lines.flatMap(l -> Arrays.stream(l.split(";")))
+
+Annotations utiles : 
+@Data   @Builder   @Test   @Before   @After
+
+Construction DataFrame : 
+List<Row> rows = Arrays.asList(
+                RowFactory.create("aladin", 25f, 10),
+                RowFactory.create("hadoop", 100f, 350),
+                RowFactory.create("hadoop", 10f, 350)
+        );
+        Metadata md = new MetadataBuilder().build();
+        StructField field1 = new StructField("title", DataTypes.StringType, true, md);
+        StructField field2 = new StructField("price", DataTypes.FloatType, true, md);
+        StructField field3 = new StructField("nbpages", DataTypes.IntegerType, true, md);
+        StructType schema = new StructType(new StructField[]{
+                field1, field2, field3
+        });
+        Dataset<Row> ds = sparkSession.createDataFrame(rows, schema);
+
+Importation pour assertions : 
+import static org.assertj.core.api.Assertions.assertThat;
+
+Création session Spark  :
+SparkConf sparkConf = new SparkConf().setMaster("local[2]").setAppName("SparkApp");
+    SparkSession sparkSession = SparkSession.builder().config(sparkConf).getOrCreate();
+
+Lecture fichier CSV : 
+Dataset<Row> csv = sparkSession.read().option("delimiter", ";").option("header", "true").csv(inputFile);
+
+Supression lignes nulles : 
+df.na.frop("colonne");
+
+Jointure de datsets : 
+Dataset<Row> joinDs = ds.join(otherDs, ds.col("colonne").equalTo(otherDs.col("colonne")), "inner");
+
+
+
