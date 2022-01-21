@@ -62,8 +62,13 @@ df.na.frop("colonne");
 Jointure de datsets : 
 Dataset<Row> joinDs = ds.join(otherDs, ds.col("colonne").equalTo(otherDs.col("colonne")), "inner");
 
+Fusion de fichiers HDFS : 
+FSDataInputStream input = hdfs.open(inputFiles[i].getPath());
+FSDataOutputStream output = hdfs.create(hdfsFile);
+IOUtils.copy(input, output, false);
 
 
+==========================================================================================================
 repo Y : 
 https://github.com/Y-Duperray/PrixIndicesDePrix
 
