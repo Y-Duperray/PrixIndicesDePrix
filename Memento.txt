@@ -63,9 +63,27 @@ Jointure de datsets :
 Dataset<Row> joinDs = ds.join(otherDs, ds.col("colonne").equalTo(otherDs.col("colonne")), "inner");
 
 Fusion de fichiers HDFS : 
-FSDataInputStream input = hdfs.open(inputFiles[i].getPath());
-FSDataOutputStream output = hdfs.create(hdfsFile);
-IOUtils.copy(input, output, false);
+Configuration conf = new Configuration();
+FileSystem hdfs= FileSystem.get(conf);
+
+Path inputDir=new Path("xxx");
+Path hdfsFile= new Path("xxx");
+
+try{
+  FileStatus[] inputFiles = hdfs.listStatus(inputDir);
+  local.listStatus(inputDir)
+  FSDataOutputStream out = hdfs.create(hdfsFile);
+
+  for(int i=0; i<inputFiles.length ;i++){
+    FSDataInputStream in=hdfs.open(inputFiles[i].getPath());
+    IOUtils.copy(in, out, "UTF-8");
+  }
+  out.close();
+}catch(IOException e){
+  e.printStackTrace();
+}
+
+
 
 
 ==========================================================================================================
