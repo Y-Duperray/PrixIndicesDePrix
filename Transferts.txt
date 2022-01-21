@@ -1,0 +1,2 @@
+Ajout colonne : 
+df.withColumn("", functions.lower(df(""));
