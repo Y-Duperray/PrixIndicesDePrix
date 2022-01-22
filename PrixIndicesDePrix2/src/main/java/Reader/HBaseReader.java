@@ -11,11 +11,14 @@ import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog;
 import java.util.function.Supplier;
 
 @Slf4j
-@Builder
-@RequiredArgsConstructor
 public class HBaseReader implements Supplier<Dataset<Row>> {
     private final SparkSession sparkSession;
     private final String catalog;
+    
+    public HBaseReader(String catalog, SparkSession session){
+        this.catalog = catalog;
+        this.sparkSession = session;
+    }
 
     @Override
     public Dataset<Row> get() {
@@ -27,7 +30,7 @@ public class HBaseReader implements Supplier<Dataset<Row>> {
                     .format("org.apache.spark.sql.execution.datasources.hbase")
                     .load();
         } catch (Exception e){
-            log.error("hbase table could not be read due to ...", e);
+            e.printStackTrace();
         }
         return ds;
     }
