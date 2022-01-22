@@ -1,4 +1,4 @@
-package fr.iiil.bigdata.spark.reader;
+package fr.iiil.bigdata.spark.Reader;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
