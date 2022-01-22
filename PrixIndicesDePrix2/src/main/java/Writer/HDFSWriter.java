@@ -27,8 +27,18 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class HDFSWriter implements Consumer<Dataset<Row>> {
+    private FileSystem hdfs;
+    private String inputPathStr;
+    private SparkSession sparkSession;  
 
-    public HBaseWriter() {
+    public HBaseWriter(String path, SparkSession session) {
+        try{
+            this.hdfs = FileSystem.get(new Configuration());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        this.inputPathStr = path;
+        this.sparkSession = session;
     }
 
     @Override
