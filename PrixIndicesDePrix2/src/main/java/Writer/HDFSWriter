@@ -1,12 +1,30 @@
+package Writer;
 
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+@Slf4j
+public class HDFSWriter implements Consumer<Dataset<Row>> {
 
+    public HBaseWriter() {
+    }
 
-/*
-String outlines = wordCount.entrySet().stream().map( e -> String.format("%s,%d", e.getKey(), e.getValue())).collect(Collectors.joining("\n"));
-FSDataOutputStream outstream = hdfs.create(outputPath.suffix(String.format("/wordcount/%s", locatedFileStatus.getPath().getName())));
-IOUtils.write(outlines, outstream, "UTF-8");
-outstream.close();
-instream.close();
-*/
+    @Override
+    public void accept(Dataset<Row> ds) {
+        String outlines = ds.map( e -> String.format("%d", e.getValue())).collect(Collectors.joining("\n"));
+        FSDataOutputStream outstream = hdfs.create(outputPath.suffix(String.format("/variations/%s", locatedFileStatus.getPath().getName())));
+        IOUtils.write(outlines, outstream, "UTF-8");
+        outstream.close();
+        instream.close();
+    }
+}
