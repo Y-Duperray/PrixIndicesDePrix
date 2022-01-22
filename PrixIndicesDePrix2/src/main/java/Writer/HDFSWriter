@@ -1,0 +1,12 @@
+
+
+
+
+
+/*
+String outlines = wordCount.entrySet().stream().map( e -> String.format("%s,%d", e.getKey(), e.getValue())).collect(Collectors.joining("\n"));
+FSDataOutputStream outstream = hdfs.create(outputPath.suffix(String.format("/wordcount/%s", locatedFileStatus.getPath().getName())));
+IOUtils.write(outlines, outstream, "UTF-8");
+outstream.close();
+instream.close();
+*/
